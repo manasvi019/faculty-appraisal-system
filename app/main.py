@@ -3,10 +3,18 @@ from app.routes.appraisal import router as appraisal_router
 from app.routes.faculty_auth import router as faculty_router
 from app.models.faculty import Faculty
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from app.database.connection import engine
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(faculty_router)
 app.include_router(appraisal_router)
 app.include_router(admin_router)
