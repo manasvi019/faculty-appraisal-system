@@ -1,4 +1,5 @@
 from app.routes.admin_auth import router as admin_router
+from app.routes.publication import router as publication_router
 from app.routes.appraisal import router as appraisal_router
 from app.routes.faculty_auth import router as faculty_router
 from app.models.faculty import Faculty
@@ -18,6 +19,7 @@ app.add_middleware(
 app.include_router(faculty_router)
 app.include_router(appraisal_router)
 app.include_router(admin_router)
+app.include_router(publication_router)
 
 @app.get("/")
 def read_root():
