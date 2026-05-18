@@ -1,6 +1,7 @@
-from app.schemas.faculty import FacultyResponse
+from app.schemas.faculty import FacultyResponse, FacultyCreate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from app.database.connection import SessionLocal
 
 from app.database.connection import get_db
 from app.models.faculty import Faculty
@@ -23,6 +24,32 @@ def faculty_login(data: FacultyLogin, db: Session = Depends(get_db)):
         "faculty_id": faculty.faculty_id,
         "name": faculty.name
     }
+
+@router.post("/create")
+def create_faculty(faculty: FacultyCreate):
+
+    db: Session = SessionLocal()
+
+    new_faculty = Faculty(
+
+        name = faculty.name,
+        email = faculty.email,
+        password = faculty.password,
+        designation = faculty.designation,
+        department = faculty.department
+
+    )
+
+    db.add(new_faculty)
+
+    db.commit()
+
+    db.refresh(new_faculty)
+
+    return {
+        "message": "Faculty created successfully"
+    }
+
 @router.get("/profile/{faculty_id}", response_model=FacultyResponse)
 def get_faculty_profile(faculty_id: int, db: Session = Depends(get_db)):
     faculty = db.query(Faculty).filter(Faculty.faculty_id == faculty_id).first()
