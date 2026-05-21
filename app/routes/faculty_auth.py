@@ -58,3 +58,10 @@ def get_faculty_profile(faculty_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Faculty not found")
 
     return faculty
+
+@router.get("/all")
+def get_all_faculties(db: Session = Depends(get_db)):
+
+    faculties = db.query(Faculty).all()
+
+    return faculties
